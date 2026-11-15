@@ -69,3 +69,43 @@ if st.button("Test TMDB connection"):
 
         except requests.RequestException:
             st.error("Connection failed. Try again shortly.")
+from tmdb import get_movie
+
+st.divider()
+st.subheader("Example film")
+
+try:
+    movie = get_movie(314365)
+
+    st.subheader(movie.get("title", "Untitled"))
+
+    year = movie.get("release_date", "")[:4]
+    runtime = movie.get("runtime") or "Unknown"
+    rating = movie.get("vote_average", 0)
+
+    st.write(
+        f"{year} | {runtime} minutes | "
+        f"TMDB rating: {rating:.1f}/10"
+    )
+
+    genres = ", ".join(
+        genre["name"] for genre in movie.get("genres", [])
+    )
+    st.write("Genres:", genres or "Unavailable")
+
+    st.write(
+        movie.get("overview") or "No plot summary available."
+    )
+
+    directors = [
+        person["name"]
+        for person in movie.get("credits", {}).get("crew", [])
+        if person.get("job") == "Director"
+    ]
+    st.write("Director:", ", ".join(directors) or "Unavailable")
+
+except requests.RequestException:
+    st.error("Unable to load the film. Please try again.")
+
+except ValueError:
+    st.error("Check your TMDB token in Streamlit Secrets.")
