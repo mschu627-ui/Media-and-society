@@ -171,7 +171,7 @@ if submitted:
                             if not requested_genres.intersection(film_genres):
                                 continue
 
-                        if certification != "Any":
+                    if certification != "Any":
                         film_certifications = get_certifications(
                             film, country="US"
                         )
