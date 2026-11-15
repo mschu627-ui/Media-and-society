@@ -147,3 +147,26 @@ if search_submitted:
 
         except ValueError:
             st.error("Check your TMDB token in Streamlit Secrets.")
+from catalogue import load_catalogue
+
+st.divider()
+st.subheader("Film collection")
+
+if st.button("Load film collection"):
+    try:
+        with st.spinner("Loading movie details from TMDB..."):
+            movies, missing = load_catalogue()
+
+        st.success(f"Loaded {len(movies)} films.")
+
+        for film in movies:
+            year = (film.get("release_date") or "")[:4]
+            st.write(f"{film['title']} ({year})")
+
+        if missing:
+            st.warning(
+                "These films did not load: " + ", ".join(missing)
+            )
+
+    except ValueError:
+        st.error("Check your TMDB token in Streamlit Secrets.")
