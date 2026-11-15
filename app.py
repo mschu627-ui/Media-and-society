@@ -1,3 +1,4 @@
+from tmdb import get_certifications
 import requests
 import streamlit as st
 
