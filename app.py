@@ -185,7 +185,28 @@ with st.form("topic_recommendations"):
         "Preferred plot-summary sentiment",
         ["Any", "Positive", "Neutral", "Negative"]
     )
+        year_range = st.slider(
+        "Release year range",
+        min_value=1900,
+        max_value=2026,
+        value=(1900, 2026)
+    )
 
+    minimum_rating = st.slider(
+        "Minimum TMDB rating",
+        min_value=0.0,
+        max_value=10.0,
+        value=0.0,
+        step=0.5
+    )
+
+    maximum_runtime = st.slider(
+        "Maximum runtime in minutes",
+        min_value=30,
+        max_value=300,
+        value=300,
+        step=5
+    )
     submitted = st.form_submit_button("Recommend films")
 
 if submitted:
@@ -195,6 +216,17 @@ if submitted:
         try:
             with st.spinner("Finding relevant films..."):
                 movies, missing = load_catalogue()
+                                movies = [
+                    film for film in movies
+                    if film.get("release_date")
+                    and year_range[0]
+                    <= int(film["release_date"][:4])
+                    <= year_range[1]
+                    and (film.get("vote_average") or 0)
+                    >= minimum_rating
+                    and 0 < (film.get("runtime") or 0)
+                    <= maximum_runtime
+                ]
                 recommendations = recommend(
                     movies,
                     study_topic.strip(),
