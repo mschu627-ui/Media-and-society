@@ -170,3 +170,74 @@ if st.button("Load film collection"):
 
     except ValueError:
         st.error("Check your TMDB token in Streamlit Secrets.")
+from recommender import recommend
+
+st.divider()
+st.subheader("Find films for your topic")
+
+with st.form("topic_recommendations"):
+    study_topic = st.text_input(
+        "Enter a communication topic",
+        placeholder="Example: journalism newspaper reporter"
+    )
+
+    tone = st.selectbox(
+        "Preferred plot-summary sentiment",
+        ["Any", "Positive", "Neutral", "Negative"]
+    )
+
+    submitted = st.form_submit_button("Recommend films")
+
+if submitted:
+    if not study_topic.strip():
+        st.warning("Enter a topic first.")
+    else:
+        try:
+            with st.spinner("Finding relevant films..."):
+                movies, missing = load_catalogue()
+                recommendations = recommend(
+                    movies,
+                    study_topic.strip(),
+                    tone=tone
+                )
+
+            if missing:
+                st.warning(
+                    "Some films were unavailable: "
+                    + ", ".join(missing)
+                )
+
+            if not recommendations:
+                st.info(
+                    "No matching topic words found. "
+                    "Try related words such as "
+                    "journalism, reporter, television, or politics."
+                )
+
+            for result in recommendations:
+                film = result["movie"]
+                year = (film.get("release_date") or "")[:4]
+
+                st.subheader(f"{film['title']} ({year})")
+                st.write(
+                    film.get("overview")
+                    or "No plot summary available."
+                )
+                st.caption(
+                    f"Topic similarity: "
+                    f"{result['content_score']:.3f} | "
+                    f"Plot sentiment: "
+                    f"{result['sentiment']:.2f}"
+                )
+
+            st.caption(
+                "Results come from the current 12-film collection. "
+                "Topic similarity measures shared wording. "
+                "Plot sentiment estimates the summary's language tone."
+            )
+
+        except requests.RequestException:
+            st.error("TMDB is unavailable. Please try again.")
+
+        except ValueError:
+            st.error("Check your TMDB token in Streamlit Secrets.")
