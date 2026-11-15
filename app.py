@@ -41,7 +41,12 @@ with st.form("topic_recommendations"):
         value=0.0,
         step=0.5
     )
-
+    minimum_votes = st.number_input(
+        "Minimum number of TMDB votes",
+        min_value=0,
+        value=0,
+        step=100
+    )
     maximum_runtime = st.slider(
         "Maximum runtime in minutes",
         min_value=30,
