@@ -24,3 +24,24 @@ def get_movie(movie_id):
 
     response.raise_for_status()
     return response.json()
+@st.cache_data(ttl=3600)
+def search_movies(title):
+    """Search TMDB by movie title."""
+    token = st.secrets.get("TMDB_TOKEN", "").strip()
+
+    if not token:
+        raise ValueError("TMDB_TOKEN is missing.")
+
+    response = requests.get(
+        f"{BASE_URL}/search/movie",
+        headers={"Authorization": f"Bearer {token}"},
+        params={
+            "query": title,
+            "include_adult": "false",
+            "language": "en-US"
+        },
+        timeout=20
+    )
+
+    response.raise_for_status()
+    return response.json().get("results", [])
