@@ -171,6 +171,13 @@ if submitted:
                             if not requested_genres.intersection(film_genres):
                                 continue
 
+                        if certification != "Any":
+                        film_certifications = get_certifications(
+                            film, country="US"
+                        )
+                        if certification not in film_certifications:
+                            continue
+
                     filtered_movies.append(film)
                 recommendations = recommend(
                     filtered_movies,
