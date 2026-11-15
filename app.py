@@ -83,6 +83,9 @@ if submitted:
                     if rating < minimum_rating:
                         continue
 
+                    if (film.get("vote_count") or 0) < minimum_votes:
+                        continue
+
                     if not 0 < runtime <= maximum_runtime:
                         continue
 
