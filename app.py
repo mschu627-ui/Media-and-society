@@ -54,7 +54,10 @@ with st.form("topic_recommendations"):
         value=300,
         step=5
     )
-
+    language = st.selectbox(
+        "Original language",
+        ["Any", "English", "French", "Spanish", "Italian", "German"]
+    )
     submitted = st.form_submit_button("Recommend films")
 
 if submitted:
