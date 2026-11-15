@@ -67,6 +67,19 @@ with st.form("topic_recommendations"):
         "Director name, optional",
         placeholder="Example: Steven Spielberg"
     )
+    selected_genres = st.multiselect(
+        "Genres",
+        [
+            "Drama", "Thriller", "Comedy", "History",
+            "Crime", "Documentary", "Romance",
+            "Science Fiction", "Adventure", "Action"
+        ]
+    )
+
+    genre_rule = st.selectbox(
+        "How should genres match?",
+        ["Any selected genre (OR)", "All selected genres (AND)"]
+    )
     submitted = st.form_submit_button("Recommend films")
 
 if submitted:
