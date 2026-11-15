@@ -45,3 +45,17 @@ def search_movies(title):
 
     response.raise_for_status()
     return response.json().get("results", [])
+def get_certifications(movie, country="US"):
+    """Return non-empty certifications for the selected country."""
+    certifications = set()
+
+    for release in movie.get("release_dates", {}).get("results", []):
+        if release.get("iso_3166_1") != country:
+            continue
+
+        for entry in release.get("release_dates", []):
+            certification = (entry.get("certification") or "").strip()
+            if certification:
+                certifications.add(certification)
+
+    return certifications
