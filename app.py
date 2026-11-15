@@ -123,7 +123,7 @@ if submitted:
                     if (film.get("vote_count") or 0) < minimum_votes:
                         continue
 
-                    if not 0 < runtime <= maximum_runtime:
+                    if runtime <= 0 or not minimum_runtime <= runtime <= maximum_runtime:
                         continue
                     language_codes = {
                         "English": "en",
