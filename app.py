@@ -111,7 +111,7 @@ if submitted:
                     if language != "Any":
                         if film.get("original_language") != language_codes[language]:
                             continue
-                                        credits = film.get("credits") or {}
+                    credits = film.get("credits") or {}
 
                     cast_names = [
                         person.get("name", "").casefold()
