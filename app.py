@@ -111,8 +111,34 @@ if submitted:
                     if language != "Any":
                         if film.get("original_language") != language_codes[language]:
                             continue
-                    filtered_movies.append(film)
+                                        credits = film.get("credits") or {}
 
+                    cast_names = [
+                        person.get("name", "").casefold()
+                        for person in credits.get("cast", [])
+                    ]
+
+                    director_names = [
+                        person.get("name", "").casefold()
+                        for person in credits.get("crew", [])
+                        if person.get("job") == "Director"
+                    ]
+
+                    if actor_name.strip():
+                        if not any(
+                            actor_name.strip().casefold() in name
+                            for name in cast_names
+                        ):
+                            continue
+
+                    if director_name.strip():
+                        if not any(
+                            director_name.strip().casefold() in name
+                            for name in director_names
+                        ):
+                            continue
+
+                    filtered_movies.append(film)
                 recommendations = recommend(
                     filtered_movies,
                     study_topic.strip(),
