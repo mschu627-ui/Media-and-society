@@ -58,6 +58,15 @@ with st.form("topic_recommendations"):
         "Original language",
         ["Any", "English", "French", "Spanish", "Italian", "German"]
     )
+        actor_name = st.text_input(
+        "Actor name, optional",
+        placeholder="Example: Mark Ruffalo"
+    )
+
+    director_name = st.text_input(
+        "Director name, optional",
+        placeholder="Example: Steven Spielberg"
+    )
     submitted = st.form_submit_button("Recommend films")
 
 if submitted:
