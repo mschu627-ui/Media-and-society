@@ -109,3 +109,41 @@ except requests.RequestException:
 
 except ValueError:
     st.error("Check your TMDB token in Streamlit Secrets.")
+from tmdb import search_movies
+
+st.divider()
+st.subheader("Search by movie title")
+
+with st.form("movie_title_search"):
+    movie_title = st.text_input(
+        "Enter a movie title",
+        placeholder="Example: Spotlight"
+    )
+    search_submitted = st.form_submit_button("Search movies")
+
+if search_submitted:
+    if not movie_title.strip():
+        st.warning("Enter a movie title first.")
+    else:
+        try:
+            results = search_movies(movie_title.strip())
+
+            if not results:
+                st.info("No movies found. Try another title.")
+
+            for film in results[:5]:
+                title = film.get("title", "Untitled")
+                year = film.get("release_date", "")[:4] or "Unknown year"
+
+                st.subheader(f"{title} ({year})")
+                st.write(
+                    film.get("overview")
+                    or "No plot summary available."
+                )
+                st.caption(f"TMDB movie ID: {film['id']}")
+
+        except requests.RequestException:
+            st.error("Search failed. Please try again.")
+
+        except ValueError:
+            st.error("Check your TMDB token in Streamlit Secrets.")
