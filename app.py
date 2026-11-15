@@ -209,6 +209,11 @@ if submitted:
                 year = (film.get("release_date") or "")[:4]
 
                 st.subheader(f"{film['title']} ({year})")
+                ratings = get_certifications(film, country="US")
+                st.write(
+                    "US certification: "
+                    + (", ".join(sorted(ratings)) or "Unavailable")
+                )
                 st.write(
                     "Genres: " + ", ".join(
                         genre["name"]
