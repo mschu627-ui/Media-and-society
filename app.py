@@ -151,6 +151,21 @@ if submitted:
                         ):
                             continue
 
+                    film_genres = {
+                        genre["name"]
+                        for genre in film.get("genres", [])
+                    }
+
+                    if selected_genres:
+                        requested_genres = set(selected_genres)
+
+                        if genre_rule == "All selected genres (AND)":
+                            if not requested_genres.issubset(film_genres):
+                                continue
+                        else:
+                            if not requested_genres.intersection(film_genres):
+                                continue
+
                     filtered_movies.append(film)
                 recommendations = recommend(
                     filtered_movies,
