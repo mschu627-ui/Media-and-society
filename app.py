@@ -33,3 +33,39 @@ if st.button("Find films"):
         "Your interface is working. "
         "The TMDB connection comes next."
     )
+import requests
+
+st.divider()
+
+if st.button("Test TMDB connection"):
+    token = st.secrets.get("TMDB_TOKEN", "")
+
+    if not token:
+        st.error("Add TMDB_TOKEN in Streamlit Secrets first.")
+    else:
+        try:
+            response = requests.get(
+                "https://api.themoviedb.org/3/movie/11",
+                headers={
+                    "Authorization": f"Bearer {token.strip()}"
+                },
+                timeout=15
+            )
+
+            if response.status_code == 200:
+                movie = response.json()
+                st.success("Connected to TMDB!")
+                st.write("Test movie:", movie["title"])
+            elif response.status_code == 401:
+                st.error(
+                    "Token rejected. Check your API Read "
+                    "Access Token in Streamlit Secrets."
+                )
+            else:
+                st.error(
+                    f"TMDB returned status {response.status_code}. "
+                    "Try again shortly."
+                )
+
+        except requests.RequestException:
+            st.error("Connection failed. Try again shortly.")
