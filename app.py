@@ -185,7 +185,8 @@ with st.form("topic_recommendations"):
         "Preferred plot-summary sentiment",
         ["Any", "Positive", "Neutral", "Negative"]
     )
-        year_range = st.slider(
+
+    year_range = st.slider(
         "Release year range",
         min_value=1900,
         max_value=2026,
@@ -207,6 +208,7 @@ with st.form("topic_recommendations"):
         value=300,
         step=5
     )
+
     submitted = st.form_submit_button("Recommend films")
 
 if submitted:
