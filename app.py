@@ -91,7 +91,17 @@ if submitted:
 
                     if not 0 < runtime <= maximum_runtime:
                         continue
+                    language_codes = {
+                        "English": "en",
+                        "French": "fr",
+                        "Spanish": "es",
+                        "Italian": "it",
+                        "German": "de"
+                    }
 
+                    if language != "Any":
+                        if film.get("original_language") != language_codes[language]:
+                            continue
                     filtered_movies.append(film)
 
                 recommendations = recommend(
