@@ -198,6 +198,12 @@ if submitted:
 
                 st.subheader(f"{film['title']} ({year})")
                 st.write(
+                    "Genres: " + ", ".join(
+                        genre["name"]
+                        for genre in film.get("genres", [])
+                    )
+                )
+                st.write(
                     film.get("overview")
                     or "No plot summary available."
                 )
