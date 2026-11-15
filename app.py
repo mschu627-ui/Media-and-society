@@ -81,6 +81,10 @@ with st.form("topic_recommendations"):
         "How should genres match?",
         ["Any selected genre (OR)", "All selected genres (AND)"]
     )
+    certification = st.selectbox(
+        "US age certification",
+        ["Any", "G", "PG", "PG-13", "R", "NC-17"]
+    )
     submitted = st.form_submit_button("Recommend films")
 
 if submitted:
