@@ -58,7 +58,7 @@ with st.form("topic_recommendations"):
         "Original language",
         ["Any", "English", "French", "Spanish", "Italian", "German"]
     )
-        actor_name = st.text_input(
+    actor_name = st.text_input(
         "Actor name, optional",
         placeholder="Example: Mark Ruffalo"
     )
