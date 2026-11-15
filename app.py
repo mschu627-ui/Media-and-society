@@ -48,7 +48,7 @@ with st.form("topic_recommendations"):
         value=0,
         step=100
     )
-     minimum_runtime = st.slider(
+    minimum_runtime = st.slider(
         "Minimum runtime in minutes",
         min_value=0,
         max_value=300,
