@@ -112,20 +112,25 @@ with st.form("topic_recommendations"):
         value=0,
         step=100
     )
-    minimum_runtime = st.slider(
-        "Minimum runtime in minutes",
-        min_value=0,
-        max_value=300,
-        value=0,
-        step=5
-    )
-    maximum_runtime = st.slider(
-        "Maximum runtime in minutes",
-        min_value=30,
-        max_value=300,
-        value=300,
-        step=5
-    )
+       runtime_left, runtime_right = st.columns(2)
+
+    with runtime_left:
+        minimum_runtime = st.slider(
+            "Minimum runtime in minutes",
+            min_value=0,
+            max_value=300,
+            value=0,
+            step=5
+        )
+
+    with runtime_right:
+        maximum_runtime = st.slider(
+            "Maximum runtime in minutes",
+            min_value=30,
+            max_value=300,
+            value=300,
+            step=5
+        )
     language = st.selectbox(
         "Original language",
         ["Any", "English", "French", "Spanish", "Italian", "German"]
