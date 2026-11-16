@@ -130,3 +130,36 @@ def similar_movies(movies, selected_id, limit=5):
         )
 
     return results
+def expand_query(query):
+    """Add related terms for five communication themes."""
+    theme_terms = {
+        "journalism": [
+            "journalism", "journalist", "reporter",
+            "reporting", "newspaper", "news"
+        ],
+        "propaganda": [
+            "propaganda", "manipulation", "persuasion",
+            "disinformation"
+        ],
+        "public opinion": [
+            "public opinion", "politics", "political",
+            "election", "campaign"
+        ],
+        "reputation": [
+            "reputation", "scandal", "public relations",
+            "image", "publicity"
+        ],
+        "ethics": [
+            "ethics", "ethical", "truth", "deception",
+            "dishonesty", "corruption"
+        ]
+    }
+
+    text = query.casefold()
+    extra_terms = []
+
+    for terms in theme_terms.values():
+        if any(term in text for term in terms):
+            extra_terms.extend(terms)
+
+    return query + " " + " ".join(sorted(set(extra_terms)))
