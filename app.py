@@ -318,3 +318,69 @@ except requests.RequestException:
 
 except ValueError:
     st.error("Check your TMDB token and movie data.")
+import pandas as pd
+
+st.divider()
+st.subheader("Compare two films")
+
+try:
+    comparison_movies, _ = load_catalogue()
+
+    comparison_lookup = {
+        movie["id"]: movie for movie in comparison_movies
+    }
+
+    chosen_ids = st.multiselect(
+        "Choose two films",
+        options=list(comparison_lookup),
+        format_func=lambda movie_id: (
+            f"{comparison_lookup[movie_id]['title']} "
+            f"({comparison_lookup[movie_id].get('release_date', '')[:4]})"
+        ),
+        max_selections=2,
+        key="comparison_selector"
+    )
+
+    if len(chosen_ids) == 2:
+        rows = []
+
+        for movie_id in chosen_ids:
+            movie = comparison_lookup[movie_id]
+            credits = movie.get("credits") or {}
+
+            directors = [
+                person["name"]
+                for person in credits.get("crew", [])
+                if person.get("job") == "Director"
+            ]
+
+            ratings = get_certifications(movie, country="US")
+
+            rows.append({
+                "Film": movie["title"],
+                "Year": (movie.get("release_date") or "")[:4],
+                "Runtime (minutes)": movie.get("runtime"),
+                "TMDB rating": movie.get("vote_average"),
+                "Vote count": movie.get("vote_count"),
+                "Original language": movie.get("original_language"),
+                "US certification": ", ".join(sorted(ratings))
+                or "Unavailable",
+                "Genres": ", ".join(
+                    genre["name"]
+                    for genre in movie.get("genres", [])
+                ),
+                "Director": ", ".join(directors),
+                "Plot summary": movie.get("overview") or "Unavailable"
+            })
+
+        table = pd.DataFrame(rows).set_index("Film").T
+        st.dataframe(table.astype(str), use_container_width=True)
+
+    else:
+        st.info("Select two films to display their comparison.")
+
+except requests.RequestException:
+    st.error("Unable to load comparison data. Please try again.")
+
+except ValueError:
+    st.error("Check your TMDB token and movie data.")
