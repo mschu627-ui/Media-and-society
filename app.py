@@ -121,7 +121,10 @@ if submitted:
                         continue
 
                     year = int(release_date[:4])
-
+                    if decade != "Any":
+                        decade_start = int(decade)
+                        if not decade_start <= year <= decade_start + 9:
+                            continue
                     if not year_range[0] <= year <= year_range[1]:
                         continue
 
