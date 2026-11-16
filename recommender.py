@@ -21,7 +21,7 @@ def movie_text(movie):
     ])
 
 
-def recommend(movies, query, tone="Any", limit=5):
+def recommend(movies, query, tone="Any", limit=5, expand=True):
     """Rank relevant films, optionally adding sentiment matching."""
     if not movies or not query.strip():
         return []
@@ -38,7 +38,8 @@ def recommend(movies, query, tone="Any", limit=5):
     except ValueError:
         return []
 
-    query_vector = vectoriser.transform([expand_query(query)])
+    search_text = expand_query(query) if expand else query
+    query_vector = vectoriser.transform([search_text])
     similarities = cosine_similarity(query_vector, matrix)[0]
 
     targets = {"Positive": 1.0, "Neutral": 0.0, "Negative": -1.0}
@@ -88,7 +89,8 @@ def similar_movies(movies, selected_id, limit=5):
     results = recommend(
         candidates,
         movie_text(selected),
-        limit=limit
+        limit=limit,
+        expand=False
     )
 
     # Explain similarities using shared TMDB metadata.
