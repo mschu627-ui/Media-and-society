@@ -112,7 +112,7 @@ with st.form("topic_recommendations"):
         value=0,
         step=100
     )
-       runtime_left, runtime_right = st.columns(2)
+    runtime_left, runtime_right = st.columns(2)
 
     with runtime_left:
         minimum_runtime = st.slider(
