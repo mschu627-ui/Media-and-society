@@ -263,7 +263,7 @@ if submitted:
             st.error("Check your TMDB token and movie data.")
 
 st.caption(
-    "Recommendations use a starting collection of 12 films. "
+    "Recommendations use a curated collection of up to 30 films. "
     "Topic similarity measures shared wording. "
     "Plot sentiment estimates the summary's language tone."
 )
