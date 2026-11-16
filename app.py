@@ -22,7 +22,23 @@ st.sidebar.markdown(
     "[Similar films](#find-similar-films)\n\n"
     "[Compare films](#compare-two-films)"
 )
-
+with st.expander("About this app and how to use"):
+    st.write(
+        "Media and Society helps communications students find "
+        "films for discussions about journalism, propaganda, "
+        "public opinion, reputation, and ethics."
+    )
+    st.write(
+        "1. Describe your topic in a sentence. "
+        "2. Adjust filters and select Recommend films. "
+        "3. Explore similar films or compare two titles."
+    )
+    st.write(
+        "Recommendations cover a curated collection, "
+        "rather than the full TMDB database. "
+        "Sentiment describes plot-summary wording. "
+        "Films are discussion resources, not academic evidence."
+    )
 st.subheader("Find films")
 with st.form("topic_recommendations"):
     study_topic = st.text_input(
