@@ -267,3 +267,54 @@ st.caption(
     "Topic similarity measures shared wording. "
     "Plot sentiment estimates the summary's language tone."
 )
+from recommender import similar_movies
+
+st.divider()
+st.subheader("Find similar films")
+st.write(
+    "Choose a film to compare with the full collection. "
+    "The topic-search filters above apply only to topic results."
+)
+
+try:
+    collection, unavailable = load_catalogue()
+
+    if len(collection) < 2:
+        st.info("At least two films are needed for comparison.")
+    else:
+        film_lookup = {
+            movie["id"]: movie for movie in collection
+        }
+
+        selected_id = st.selectbox(
+            "Choose a film",
+            options=list(film_lookup),
+            format_func=lambda movie_id: (
+                f"{film_lookup[movie_id]['title']} "
+                f"({film_lookup[movie_id].get('release_date', '')[:4]})"
+            ),
+            key="similar_film_selector"
+        )
+
+        if st.button("Find similar films"):
+            matches = similar_movies(collection, selected_id)
+
+            if not matches:
+                st.info("No similar films found.")
+
+            for match in matches:
+                film = match["movie"]
+                year = (film.get("release_date") or "")[:4]
+
+                st.subheader(f"{film['title']} ({year})")
+                st.write(match["explanation"])
+                st.write(
+                    film.get("overview")
+                    or "No plot summary available."
+                )
+
+except requests.RequestException:
+    st.error("Unable to load films. Please try again.")
+
+except ValueError:
+    st.error("Check your TMDB token and movie data.")
