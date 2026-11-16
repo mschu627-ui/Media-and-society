@@ -70,3 +70,63 @@ def recommend(movies, query, tone="Any", limit=5):
         key=lambda result: result["score"],
         reverse=True
     )[:limit]
+def similar_movies(movies, selected_id, limit=5):
+    """Rank other films by shared plot, genre, and keyword text."""
+    selected = next(
+        (movie for movie in movies if movie["id"] == selected_id),
+        None
+    )
+
+    if selected is None:
+        return []
+
+    candidates = [
+        movie for movie in movies
+        if movie["id"] != selected_id
+    ]
+
+    results = recommend(
+        candidates,
+        movie_text(selected),
+        limit=limit
+    )
+
+    # Explain similarities using shared TMDB metadata.
+    selected_genres = {
+        genre["name"] for genre in selected.get("genres", [])
+    }
+    selected_keywords = {
+        keyword["name"]
+        for keyword in selected.get("keywords", {}).get("keywords", [])
+    }
+
+    for result in results:
+        movie = result["movie"]
+
+        shared_genres = selected_genres.intersection(
+            genre["name"] for genre in movie.get("genres", [])
+        )
+        shared_keywords = selected_keywords.intersection(
+            keyword["name"]
+            for keyword in movie.get("keywords", {}).get("keywords", [])
+        )
+
+        reasons = []
+
+        if shared_genres:
+            reasons.append(
+                "Shared genres: " + ", ".join(sorted(shared_genres))
+            )
+
+        if shared_keywords:
+            reasons.append(
+                "Shared keywords: "
+                + ", ".join(sorted(shared_keywords)[:5])
+            )
+
+        result["explanation"] = (
+            ". ".join(reasons)
+            or "Similar wording in plot summaries and metadata."
+        )
+
+    return results
