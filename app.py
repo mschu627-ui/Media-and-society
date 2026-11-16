@@ -16,7 +16,14 @@ st.write(
     "Find films exploring journalism, propaganda, "
     "public opinion, reputation, and communication ethics."
 )
+st.sidebar.title("Media and Society")
+st.sidebar.markdown(
+    "[Find films](#find-films)\n\n"
+    "[Similar films](#find-similar-films)\n\n"
+    "[Compare films](#compare-two-films)"
+)
 
+st.subheader("Find films")
 with st.form("topic_recommendations"):
     study_topic = st.text_input(
         "Enter a communication topic",
