@@ -97,6 +97,11 @@ with st.form("topic_recommendations"):
 if submitted:
     if not study_topic.strip():
         st.warning("Enter a topic first.")
+    elif minimum_runtime > maximum_runtime:
+        st.warning(
+            "Minimum runtime must be less than "
+            "or equal to maximum runtime."
+        )
     else:
         try:
             with st.spinner("Finding relevant films..."):
