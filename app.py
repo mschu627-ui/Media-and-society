@@ -38,10 +38,6 @@ with st.form("topic_recommendations"):
         "Release decade",
         ["Any"] + [str(year) for year in range(1900, 2030, 10)]
     )
-    decade = st.selectbox(
-        "Release decade",
-        ["Any"] + [str(year) for year in range(1900, 2030, 10)]
-    )
     minimum_rating = st.slider(
         "Minimum TMDB rating",
         min_value=0.0,
