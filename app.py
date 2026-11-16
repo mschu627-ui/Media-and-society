@@ -362,6 +362,16 @@ try:
                 "Runtime (minutes)": movie.get("runtime"),
                 "TMDB rating": movie.get("vote_average"),
                 "Vote count": movie.get("vote_count"),
+                "Budget (USD)": (
+                    f"${movie['budget']:,}"
+                    if movie.get("budget")
+                    else "Unavailable"
+                ),
+                "Box office revenue (USD)": (
+                    f"${movie['revenue']:,}"
+                    if movie.get("revenue")
+                    else "Unavailable"
+                ),
                 "Original language": movie.get("original_language"),
                 "US certification": ", ".join(sorted(ratings))
                 or "Unavailable",
