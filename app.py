@@ -135,15 +135,19 @@ with st.form("topic_recommendations"):
         "Original language",
         ["Any", "English", "French", "Spanish", "Italian", "German"]
     )
-    actor_name = st.text_input(
-        "Actor name, optional",
-        placeholder="Example: Mark Ruffalo"
-    )
+    actor_column, director_column = st.columns(2)
 
-    director_name = st.text_input(
-        "Director name, optional",
-        placeholder="Example: Steven Spielberg"
-    )
+    with actor_column:
+        actor_name = st.text_input(
+            "Actor name, optional",
+            placeholder="Example: Mark Ruffalo"
+        )
+
+    with director_column:
+        director_name = st.text_input(
+            "Director name, optional",
+            placeholder="Example: Steven Spielberg"
+        )
     selected_genres = st.multiselect(
         "Genres",
         [
