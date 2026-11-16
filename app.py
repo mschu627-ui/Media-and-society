@@ -301,6 +301,13 @@ if submitted:
                 year = (film.get("release_date") or "")[:4]
 
                 st.subheader(f"{film['title']} ({year})")
+                poster_path = film.get("poster_path")
+
+                if poster_path:
+                    st.image(
+                        f"https://image.tmdb.org/t/p/w342{poster_path}",
+                        width=150
+                    )
                 ratings = get_certifications(film, country="US")
                 st.write(
                     "US certification: "
