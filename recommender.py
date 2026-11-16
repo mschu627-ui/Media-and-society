@@ -38,7 +38,7 @@ def recommend(movies, query, tone="Any", limit=5):
     except ValueError:
         return []
 
-    query_vector = vectoriser.transform([query])
+    query_vector = vectoriser.transform([expand_query(query)])
     similarities = cosine_similarity(query_vector, matrix)[0]
 
     targets = {"Positive": 1.0, "Neutral": 0.0, "Negative": -1.0}
