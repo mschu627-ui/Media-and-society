@@ -1,4 +1,4 @@
-from tmdb import get_certifications
+=from tmdb import get_certifications
 import requests
 import streamlit as st
 
@@ -10,7 +10,45 @@ st.set_page_config(
     page_icon="🎬",
     layout="wide"
 )
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Public+Sans:wght@400;500;600;700&display=swap');
 
+    .stApp,
+    .stApp p,
+    .stApp label,
+    .stApp input,
+    .stApp button,
+    .stApp textarea,
+    .stApp [data-baseweb="select"] {
+        font-family: 'Public Sans', sans-serif;
+    }
+
+    .stApp h1,
+    .stApp h2,
+    .stApp h3 {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-weight: 400;
+        color: #3B2F24;
+    }
+
+    .stApp h1 {
+        font-size: clamp(3rem, 6vw, 5rem);
+        line-height: 1.1;
+    }
+
+    .stApp h2 {
+        font-size: 2.5rem;
+    }
+
+    .stApp h3 {
+        font-size: 2rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.title("Media and Society")
 st.write(
     "Find films exploring journalism, propaganda, "
