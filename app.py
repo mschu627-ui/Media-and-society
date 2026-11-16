@@ -300,42 +300,54 @@ if submitted:
                 film = result["movie"]
                 year = (film.get("release_date") or "")[:4]
 
-                st.subheader(f"{film['title']} ({year})")
-                poster_path = film.get("poster_path")
+                poster_column, details_column = st.columns([1, 4])
 
-                if poster_path:
-                    st.image(
-                        f"https://image.tmdb.org/t/p/w342{poster_path}",
-                        width=150
+                with poster_column:
+                    poster_path = film.get("poster_path")
+
+                    if poster_path:
+                        st.image(
+                            f"https://image.tmdb.org/t/p/w342{poster_path}",
+                            width=150
+                        )
+                    else:
+                        st.caption("Poster unavailable")
+
+                with details_column:
+                    st.subheader(f"{film['title']} ({year})")
+
+                    ratings = get_certifications(film, country="US")
+                    certification_text = (
+                        ", ".join(sorted(ratings)) or "Unavailable"
                     )
-                ratings = get_certifications(film, country="US")
-                st.write(
-                    "US certification: "
-                    + (", ".join(sorted(ratings)) or "Unavailable")
-                )
-                st.write(
-                    "Genres: " + ", ".join(
+                    genres = ", ".join(
                         genre["name"]
                         for genre in film.get("genres", [])
                     )
-                )
-                st.write(
-                    film.get("overview")
-                    or "No plot summary available."
-                )
 
-                st.caption(
-                    f"Runtime: {film.get('runtime')} minutes | "
-                    f"TMDB rating: "
-                    f"{film.get('vote_average', 0):.1f}/10"
-                )
+                    st.caption(
+                        f"{film.get('runtime')} minutes | "
+                        f"TMDB: {film.get('vote_average', 0):.1f}/10 | "
+                        f"US certification: {certification_text}"
+                    )
 
-                st.caption(
-                    f"Topic similarity: "
-                    f"{result['content_score']:.3f} | "
-                    f"Plot sentiment: "
-                    f"{result['sentiment']:.2f}"
-                )
+                    st.write("Genres: " + genres)
+                    st.write(
+                        film.get("overview")
+                        or "No plot summary available."
+                    )
+
+                    with st.expander("Recommendation scores"):
+                        st.write(
+                            f"Topic similarity: "
+                            f"{result['content_score']:.3f}"
+                        )
+                        st.write(
+                            f"Plot-summary sentiment: "
+                            f"{result['sentiment']:.2f}"
+                        )
+
+                st.divider()
 
         except requests.RequestException:
             st.error("TMDB is unavailable. Please try again.")
