@@ -165,7 +165,11 @@ with st.form("topic_recommendations"):
         "US age certification",
         ["Any", "G", "PG", "PG-13", "R", "NC-17"]
     )
-    submitted = st.form_submit_button("Recommend films")
+    submitted = st.form_submit_button(
+        "Find my films",
+        type="primary",
+        use_container_width=True
+    )
 
 if submitted:
     if not study_topic.strip():
